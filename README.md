@@ -21,9 +21,13 @@ This is a flat static site: no folders, Node.js, terminal, build step, or comput
 - Local practice and battery-based parkour prototype
 - Optional Supabase database schema for a future backend
 
+## Authentication upgrade
+
+The Google sign-in upgrade initializes the Supabase browser client, starts Google OAuth, restores sessions, and supports sign-out. Follow `SETUP.md` to configure the Google OAuth provider in Supabase.
+
 ## Important limits
 
-This version is a front-end starter. Room PIN entry is not yet connected to real rooms; Google sign-in, cloud-saved quizzes, synchronized multiplayer, live host controls, secure scoring, and real online leaderboards are not implemented yet. All arcade modes, including parkour, are local practice prototypes only; they are not synchronized multiplayer. Do not advertise it as a complete multiplayer service until a backend is connected and tested.
+Room PIN entry is not yet connected to real rooms; cloud-saved quizzes, synchronized multiplayer, live host controls, secure scoring, and real online leaderboards are not implemented yet. All arcade modes, including parkour, are local practice prototypes only; they are not synchronized multiplayer. Do not advertise it as a complete multiplayer service until a backend is connected and tested.
 
 ## Security
 

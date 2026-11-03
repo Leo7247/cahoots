@@ -42,24 +42,48 @@ If iPad Safari does not let you select multiple files at once, upload them in sm
 - Streak Machine combo scoring
 - Memory Flip practice challenge
 
-## Part 4 — What is not connected yet
+## Part 4 — Supabase + Google sign-in setup
 
-This starter does **not** yet have functional Google sign-in, cloud-saved quizzes, real room PIN joining, synchronized multiplayer for these modes, a live host screen, or online leaderboards. Those require connecting a backend and testing it. Do not paste secret keys into GitHub.
+The upgraded `config.js` is prefilled with the public Supabase Project URL, the publishable key you supplied, and your GitHub Pages URL. These values are designed for browser use. Never put a Supabase `service_role`/secret key, database password, or Google OAuth client secret in this repository.
 
-## Optional Part 5 — Supabase later
+### A. Configure Supabase redirect settings
 
-You can skip this entirely for the first launch. When you want accounts and online multiplayer:
+1. Open your Supabase project: https://supabase.com/dashboard/project/hiumumvqxfvoywvtqvxp
+2. Go to **Authentication → URL Configuration**.
+3. Set **Site URL** to `https://leo7247.github.io/cahoots/`.
+4. Add `https://leo7247.github.io/cahoots/` to **Redirect URLs** and save.
+5. Go to **Authentication → Sign In / Providers → Google**. Find and copy the **Callback URL** shown by Supabase. It should look like `https://hiumumvqxfvoywvtqvxp.supabase.co/auth/v1/callback`.
 
-1. Create a project at https://supabase.com.
-2. Open **Project Settings → API** and copy the Project URL and the **publishable/anon key** only.
-3. Keep private keys (including `service_role` / secret keys) out of this repository and out of `config.js`.
-4. The included `supabase-schema.sql` is a starting database outline, not a finished production security policy. Do not run it on a public production project without reviewing and hardening its access policies.
-5. Google OAuth also requires setup in Google Cloud and Supabase Auth, plus the correct redirect URLs. This flat demo does not yet wire the complete sign-in flow, so adding credentials alone will not enable sign-in.
+### B. Create Google OAuth credentials
 
-## Troubleshooting on iPad
+1. Open https://console.cloud.google.com/ and select or create a Google Cloud project.
+2. Open **Google Auth Platform** (or **APIs & Services → OAuth consent screen**) and configure the app details and audience. For testing with an External audience, add your own Google account as a test user if Google requests it.
+3. Open **Google Auth Platform → Clients** (or **APIs & Services → Credentials**) and create an **OAuth client ID**.
+4. Choose **Web application**.
+5. Under **Authorized JavaScript origins**, add `https://leo7247.github.io`.
+6. Under **Authorized redirect URIs**, paste the exact Supabase Callback URL copied in step A.5.
+7. Create the client. Copy its **Client ID** and **Client Secret**.
 
-- **Can't upload a folder:** Upload individual files from inside the extracted folder.
-- **No Upload files option:** Open the repository itself, not Settings. Look for **Add file**.
-- **Site is 404:** Ensure `index.html` is at the repository root and Pages is enabled on `main` / `/(root)`.
-- **CSS looks missing:** Make sure `style.css` and `app.js` were uploaded next to `index.html`.
-- **Quizzes disappeared:** They are stored locally in that browser. Clearing site data or changing devices may remove or hide them.
+### C. Enable Google in Supabase
+
+1. Return to **Supabase → Authentication → Sign In / Providers → Google**.
+2. Turn Google on.
+3. Paste the Google **Client ID** and **Client Secret** into the Supabase provider fields, then save.
+4. Keep the Google Client Secret inside Supabase only. Do not put it in `config.js`, `app.js`, GitHub, or this chat.
+
+### D. Publish and test
+
+1. In your GitHub repository, replace the existing `index.html`, `app.js`, `config.js`, `README.md`, and `SETUP.md` with the upgraded versions from this ZIP. Keep `style.css` and `supabase-schema.sql` if they are unchanged.
+2. Commit the changes to `main`.
+3. Wait for GitHub Pages to redeploy, then open `https://leo7247.github.io/cahoots/`.
+4. Tap **Sign in → Continue with Google**. Approve the consent screen. You should return to CaHoOtS signed in; the top bar should show your account and the button should become **Sign out**.
+
+If Google sign-in fails, check that the Supabase Google provider is enabled, the Google Client ID/Secret were saved in Supabase, and the Google Authorized redirect URI exactly matches Supabase's Callback URL. Also check the browser console/network if available.
+
+## Part 5 — Current feature limits
+
+This upgrade implements Supabase client initialization, Google OAuth sign-in, session restoration, and sign-out. It does **not** yet implement cloud-saved quizzes, profile tables, room PIN joining, synchronized multiplayer, host controls, trusted scoring, or online leaderboards. Those require a separate database schema, RLS policies, and server-side game logic. The existing `supabase-schema.sql` is only an outline; do not treat it as production-ready security policy.
+
+## iPad note
+
+No folders, PC, terminal, Node.js, or build process are needed. Upload individual files from the extracted ZIP directly to the repository root.

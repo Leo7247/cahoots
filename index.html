@@ -56,11 +56,12 @@
           <div class="arcade-bottom"><button id="arcade-next" class="btn btn-primary" disabled>Next challenge →</button><button class="btn btn-quiet" data-page="home">Exit mode</button></div>
         </div>
       </section>
-      <section id="signin" class="page"><div class="signin-card"><div class="brand-mark big-mark">C?</div><span class="eyebrow">YOUR ACCOUNT, YOUR QUESTS</span><h1>Welcome to the <span class="gradient-text">crew.</span></h1><p>Sign-in becomes available after you connect your Supabase project in the optional configuration step.</p><button class="btn btn-primary" id="google-btn">Continue with Google</button><button class="text-button" data-page="home">← Back to home</button><p class="small-note" id="auth-note">For now, quizzes are saved in this browser on this device.</p></div></section>
+      <section id="signin" class="page"><div class="signin-card"><div class="brand-mark big-mark">C?</div><span class="eyebrow">YOUR ACCOUNT, YOUR QUESTS</span><h1>Welcome to the <span class="gradient-text">crew.</span></h1><p id="signin-description">Sign in to bring your CaHoOtS identity with you.</p><button class="btn btn-primary" id="google-btn">Continue with Google</button><button class="text-button" data-page="home">← Back to home</button><p class="small-note" id="auth-note">Google sign-in will be available after the Google provider is enabled in Supabase.</p></div></section>
     </main>
     <footer><a class="brand footer-brand" href="#"><span class="brand-mark">C?</span><span>CaHoOtS<span class="brand-dot">?</span></span></a><span>Play your curiosity. Be kind. Get weird.</span><span class="footer-beta">EARLY ACCESS / BETA</span></footer>
   </div>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script><script src="app.js"></script>
 </body>
 </html>

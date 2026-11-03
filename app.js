@@ -7,6 +7,8 @@
   let position = 0;
   const trackLength = 8;
   let toastTimer;
+  let supabaseClient = null;
+  let currentSession = null;
 
   try { quizzes = JSON.parse(localStorage.getItem(storeKey) || "[]"); } catch (_) { quizzes = []; }
   const toast = (message) => {
@@ -69,15 +71,70 @@
     if (pin.length < 4) { toast("Enter the game PIN your host shared."); return; }
     toast("Room joining needs the multiplayer backend. PIN: " + pin);
   });
-  $("signin-btn").addEventListener("click", () => go("signin"));
-  $("google-btn").addEventListener("click", () => {
-    const cfg = window.CAHOOTS_CONFIG || {};
-    if (!cfg.supabaseUrl || !cfg.supabaseAnonKey) {
-      toast("Google sign-in isn't connected yet. The setup guide explains the optional connection.");
+  $("signin-btn").addEventListener("click", async () => {
+    if (currentSession && supabaseClient) {
+      const { error } = await supabaseClient.auth.signOut();
+      if (error) toast("Sign-out failed: " + error.message);
+      else toast("Signed out. See you next round!");
       return;
     }
-    toast("Auth needs the Supabase client integration before sign-in can work.");
+    go("signin");
   });
+  $("google-btn").addEventListener("click", async () => {
+    if (!supabaseClient) {
+      toast("Supabase client isn't ready. Check your connection and config.js.");
+      return;
+    }
+    const button = $("google-btn");
+    button.disabled = true;
+    button.textContent = "Opening Google…";
+    const cfg = window.CAHOOTS_CONFIG || {};
+    const redirectTo = cfg.siteUrl || (window.location.origin + window.location.pathname);
+    const { error } = await supabaseClient.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo }
+    });
+    if (error) {
+      toast("Google sign-in error: " + error.message);
+      button.disabled = false;
+      button.textContent = "Continue with Google";
+    }
+  });
+
+  async function initSupabaseAuth() {
+    const cfg = window.CAHOOTS_CONFIG || {};
+    const note = $("auth-note");
+    if (!cfg.supabaseUrl || !cfg.supabaseAnonKey || !window.supabase || !window.supabase.createClient) {
+      note.textContent = "Supabase couldn't load. Check your internet connection and public config values.";
+      return;
+    }
+    try {
+      supabaseClient = window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey, {
+        auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+      });
+      const { data, error } = await supabaseClient.auth.getSession();
+      if (error) throw error;
+      currentSession = data.session;
+      updateAuthUI();
+      supabaseClient.auth.onAuthStateChange((_event, session) => {
+        currentSession = session;
+        updateAuthUI();
+      });
+      note.textContent = "Use Google to sign in. Your session will stay on this device until you sign out.";
+    } catch (error) {
+      note.textContent = "Supabase setup issue: " + error.message;
+      toast("Couldn't initialize Supabase authentication.");
+    }
+  }
+  function updateAuthUI() {
+    const user = currentSession && currentSession.user;
+    $("user-label").textContent = user ? (user.user_metadata?.full_name || user.email || "CaHoOtS player") : "Guest player";
+    $("signin-btn").textContent = user ? "Sign out" : "Sign in";
+    $("google-btn").textContent = user ? "You're signed in ✓" : "Continue with Google";
+    $("google-btn").disabled = !!user;
+    $("signin-description").textContent = user ? "Welcome to the crew! Your Google account is connected." : "Sign in with Google to start building your CaHoOtS identity.";
+    $("auth-note").textContent = user ? "Signed in as " + (user.email || "your Google account") + "." : "Your local practice quizzes remain saved on this device.";
+  }
   function startPractice(quiz) {
     const q = quiz.questions[0];
     const answerText = `${q.text}\n\n` + q.answers.map((a,i) => `${String.fromCharCode(65+i)}. ${a}`).join("\n") + "\n\nEnter A, B, C, or D:";
