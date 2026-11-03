@@ -127,6 +127,8 @@
     }
   }
   function updateAuthUI() {
+    window.CAHOOTS_API = { client: supabaseClient, session: currentSession, quizzes };
+    window.dispatchEvent(new Event("cahoots-auth-ready"));
     const user = currentSession && currentSession.user;
     $("user-label").textContent = user ? (user.user_metadata?.full_name || user.email || "CaHoOtS player") : "Guest player";
     $("signin-btn").textContent = user ? "Sign out" : "Sign in";
@@ -291,5 +293,5 @@
     startArcade(card.dataset.mode);
   }));
 
-renderRecent(); renderQuizzes(); renderTrack(); initSupabaseAuth();
+  renderRecent(); renderQuizzes(); renderTrack(); initSupabaseAuth();
 })();

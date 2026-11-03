@@ -87,3 +87,14 @@ This upgrade implements Supabase client initialization, Google OAuth sign-in, se
 ## iPad note
 
 No folders, PC, terminal, Node.js, or build process are needed. Upload individual files from the extracted ZIP directly to the repository root.
+
+## Live multiplayer rooms (new)
+1. In `config.js`, paste the **publishable key from the `himuumvqxfvoywvtqvxp` project** into `supabaseAnonKey`. The ZIP intentionally leaves a placeholder because the previously supplied key belonged to the other project. Never use a service-role/secret key.
+2. In Supabase Dashboard for that SAME project, open SQL Editor → New query.
+3. Open `multiplayer.sql` from this ZIP, copy its entire contents, paste into SQL Editor, and Run.
+4. Confirm the query succeeds. It creates private question/answer tables, room/player tables, and RPC functions. Do not expose a `service_role` key in the website.
+5. Replace the existing root files in GitHub with all files in this ZIP (including the new `multiplayer.js` and `multiplayer.sql`). Keep every file in the repository root.
+6. Sign in to CaHoOtS with Google. Create at least one quiz in Quiz Studio, then choose Host a game. Select your quiz and nickname, create the room, and share the six-digit PIN.
+7. Players open the same website, enter the PIN and a nickname, then join. The host taps Start game and Next question. Players' answers and scores are validated by Supabase functions.
+
+Notes: This is a first live-room MVP. Hosting requires Google sign-in; joining can be anonymous. The host must use a quiz saved in that browser/device. Rooms are not yet automatically deleted, there is no reconnect/resume UI, and the MVP uses polling (about every 2.2 seconds) rather than Supabase Realtime. Test with a small private group first. Do not run the old `supabase-schema.sql` for multiplayer; run `multiplayer.sql` instead.

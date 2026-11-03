@@ -32,3 +32,6 @@ Room PIN entry is not yet connected to real rooms; cloud-saved quizzes, synchron
 ## Security
 
 Only public browser credentials may be placed in `config.js`. Never put passwords, Google OAuth client secrets, Supabase service-role keys, or other private secrets into files uploaded to GitHub.
+
+### Live multiplayer
+The live room MVP is in `multiplayer.js` and `multiplayer.sql`. Follow the multiplayer setup section in `SETUP.md` before hosting. Hosting requires Google sign-in; joining supports guest nicknames.
