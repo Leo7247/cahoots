@@ -48,9 +48,11 @@
       <section id="arcade" class="page"><div class="page-heading"><span class="eyebrow" id="arcade-eyebrow">ARCADE / GAME MODE</span><h1 id="arcade-title">Choose your <span class="gradient-text">challenge.</span></h1><p id="arcade-description">Ready, player?</p></div>
         <div class="arcade-play-card">
           <div class="arcade-stats"><span id="arcade-stat-one">ROUND 1</span><span id="arcade-stat-two">SCORE 0</span></div>
+          <div class="arcade-progress"><div id="arcade-progress-fill"></div></div>
+          <div class="arcade-meta"><span id="arcade-category">GENERAL KNOWLEDGE</span><span id="arcade-timer">15s</span></div>
           <div class="arcade-question" id="arcade-question">Loading challenge…</div>
           <div id="arcade-answers" class="arcade-answers"></div>
-          <div id="arcade-feedback" class="arcade-feedback">Choose your answer to begin.</div>
+          <div id="arcade-feedback" class="arcade-feedback" aria-live="polite">Choose your answer to begin.</div>
           <div class="arcade-bottom"><button id="arcade-next" class="btn btn-primary" disabled>Next challenge →</button><button class="btn btn-quiet" data-page="home">Exit mode</button></div>
         </div>
       </section>

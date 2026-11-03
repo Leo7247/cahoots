@@ -116,16 +116,26 @@
   // ARCADE MODES: local playable prototypes
   // ----------------------------------------------------------
   const arcadeBank = [
-    { q:"Which planet is known as the Red Planet?", a:["Venus","Mars","Jupiter","Mercury"], c:1 },
-    { q:"What is 9 × 8?", a:["64","72","81","98"], c:1 },
-    { q:"Which ocean is the largest?", a:["Atlantic","Indian","Pacific","Arctic"], c:2 },
-    { q:"What gas do plants absorb?", a:["Oxygen","Nitrogen","Carbon dioxide","Hydrogen"], c:2 },
-    { q:"How many sides does a hexagon have?", a:["5","6","7","8"], c:1 },
-    { q:"Which animal is the largest mammal?", a:["Elephant","Blue whale","Giraffe","Orca"], c:1 },
-    { q:"What is the closest star to Earth?", a:["Sirius","The Sun","Proxima Centauri","Polaris"], c:1 },
-    { q:"Which language runs in a web browser?", a:["Python","Java","JavaScript","C"], c:2 },
-    { q:"What is the square root of 144?", a:["10","11","12","14"], c:2 },
-    { q:"Which shape has three sides?", a:["Square","Triangle","Pentagon","Circle"], c:1 }
+    { q:"A spacecraft is travelling from Earth toward Mars. Why can the journey take months even at very high speed?", a:["Mars is extremely far away and both planets move in orbit","Mars has a thick atmosphere that slows spacecraft","Spacecraft must stop at every planet","The Sun pulls spacecraft to a complete stop"], c:0, cat:"SPACE", why:"Earth and Mars are separated by vast distances, and both planets continue moving around the Sun while the spacecraft travels." },
+    { q:"A café bill is $36. You leave a 20% tip. What is the total?", a:["$40.20","$42.20","$43.20","$46.00"], c:2, cat:"MATH", why:"20% of $36 is $7.20. Add the tip to the bill: $36 + $7.20 = $43.20." },
+    { q:"Which change would help a sealed bottle of cold water warm up fastest?", a:["Wrap it in a thick towel","Place it in a warm-water bath","Put it in a cooler","Cover it with ice"], c:1, cat:"SCIENCE", why:"Warm water transfers thermal energy to the bottle much faster than insulating it or surrounding it with ice." },
+    { q:"A map uses a scale of 1 cm = 5 km. Two towns are 7.4 cm apart on the map. What is the real distance?", a:["12.4 km","25 km","35 km","37 km"], c:3, cat:"MATH", why:"Multiply the map distance by the scale: 7.4 × 5 = 37 km." },
+    { q:"Why do we see lightning before hearing thunder?", a:["Light travels much faster than sound","Thunder happens after lightning","Clouds block sound for a moment","Lightning is closer than the storm"], c:0, cat:"SCIENCE", why:"Light reaches your eyes almost instantly over storm distances, while sound travels much more slowly through air." },
+    { q:"Which sentence uses the word 'reluctant' correctly?", a:["She was reluctant, so she eagerly volunteered first","He felt reluctant and hesitated before speaking","The reluctant cake tasted sweet","They reluctanted across the field"], c:1, cat:"LANGUAGE", why:"Reluctant means unwilling or hesitant. Pausing before speaking fits that meaning." },
+    { q:"A game gives 80 points, then applies a 25% bonus. What is the new score?", a:["85","90","100","105"], c:2, cat:"MATH", why:"25% of 80 is 20, so the bonus raises the score to 100." },
+    { q:"Which part of a plant mainly absorbs water from the soil?", a:["Petals","Leaves","Roots","Fruit"], c:2, cat:"BIOLOGY", why:"Roots, especially their tiny root hairs, absorb water and dissolved minerals from the soil." },
+    { q:"A rectangle has a perimeter of 30 cm and a length of 9 cm. What is its width?", a:["5 cm","6 cm","11 cm","12 cm"], c:1, cat:"MATH", why:"Perimeter is 2 × (length + width). So 15 = 9 + width, giving 6 cm." },
+    { q:"Which event is the clearest example of a physical change?", a:["Iron rusting","Wood burning","Ice melting","An egg cooking"], c:2, cat:"SCIENCE", why:"Melting changes water's state from solid to liquid but does not create a new substance." },
+    { q:"In a food chain, what is the main role of a producer?", a:["Hunt other animals","Make food using an energy source","Break down rocks","Eat only dead organisms"], c:1, cat:"ECOLOGY", why:"Producers such as plants capture energy, usually from sunlight, and make organic food." },
+    { q:"A train travels 150 km in 2.5 hours. What is its average speed?", a:["50 km/h","55 km/h","60 km/h","75 km/h"], c:2, cat:"MATH", why:"Average speed equals distance divided by time: 150 ÷ 2.5 = 60 km/h." },
+    { q:"Which planet has the most prominent ring system in our solar system?", a:["Jupiter","Saturn","Neptune","Earth"], c:1, cat:"SPACE", why:"All four giant planets have rings, but Saturn's are by far the brightest and most visually prominent." },
+    { q:"What is the best first step when evaluating a surprising online claim?", a:["Share it quickly","Check the original source and supporting evidence","Trust the number of likes","Assume a confident headline is accurate"], c:1, cat:"MEDIA LITERACY", why:"Tracing a claim to its original source and checking evidence helps separate reliable reporting from repetition or hype." },
+    { q:"A number is multiplied by 3, then 4 is added. The result is 25. What was the original number?", a:["5","6","7","9"], c:2, cat:"MATH", why:"Work backward: 25 − 4 = 21, then 21 ÷ 3 = 7." },
+    { q:"Which process moves water from plant leaves into the air?", a:["Condensation","Transpiration","Precipitation","Infiltration"], c:1, cat:"BIOLOGY", why:"Transpiration is the release of water vapor from plant tissues, mainly through tiny openings in leaves." },
+    { q:"Why are coastal areas often milder in temperature than inland areas?", a:["Ocean water heats and cools more slowly than land","The ocean blocks all sunlight","Coastal air contains no moisture","Land receives less gravity"], c:0, cat:"EARTH SCIENCE", why:"Water has a high heat capacity, so the ocean changes temperature more slowly and moderates nearby air." },
+    { q:"Which value is greatest?", a:["0.62","5/8","61%","0.605"], c:1, cat:"MATH", why:"5/8 = 0.625, which is greater than 0.62, 0.61, and 0.605." },
+    { q:"A student repeats an experiment several times and gets similar results. What does this most directly improve?", a:["Reliability","The hypothesis being true","The sample size of the universe","The experiment's popularity"], c:0, cat:"SCIENCE", why:"Repeatedly obtaining similar results makes the measurements more consistent and improves reliability." },
+    { q:"Which sentence is the strongest evidence-based conclusion?", a:["This method always works for everyone","The results suggest the method helped in this small test","I like this method, so it must be best","One result proves the rule forever"], c:1, cat:"CRITICAL THINKING", why:"It reports what the limited evidence supports without claiming more certainty or generality than the test allows." }
   ];
   const arcadeModes = {
     blitz: { title:"BLITZ!", desc:"A quick-fire brain sprint. Beat the clock and collect points.", rounds:5 },
@@ -134,7 +144,7 @@
     streak: { title:"STREAK MACHINE", desc:"Build a combo. Every correct answer increases your streak score.", rounds:8 },
     memory: { title:"MEMORY FLIP", desc:"Study a short sequence, then choose the matching pattern.", rounds:5 }
   };
-  let arcadeMode = "blitz", arcadeRound = 0, arcadeScore = 0, arcadeLives = 3, arcadeCombo = 0, arcadeBossHp = 5, arcadeLocked = false, arcadeQuestion = null;
+  let arcadeMode = "blitz", arcadeRound = 0, arcadeScore = 0, arcadeLives = 3, arcadeCombo = 0, arcadeBossHp = 5, arcadeLocked = false, arcadeQuestion = null, arcadeTimer = null, arcadeSeconds = 15;
   function shuffledBank() { return [...arcadeBank].sort(() => Math.random() - .5); }
   let arcadeDeck = shuffledBank();
   function startArcade(mode) {
@@ -149,13 +159,26 @@
     const info = arcadeModes[arcadeMode];
     if (arcadeRound >= info.rounds || (arcadeMode === "survival" && arcadeLives <= 0) || (arcadeMode === "boss" && arcadeBossHp <= 0)) { finishArcade(); return; }
     arcadeLocked = false;
+    clearInterval(arcadeTimer);
     arcadeQuestion = arcadeDeck[arcadeRound % arcadeDeck.length];
+    arcadeSeconds = arcadeMode === "blitz" ? 10 : 15;
+    $("arcade-timer").textContent = arcadeSeconds + "s";
+    $("arcade-timer").classList.remove("urgent");
+    $("arcade-category").textContent = arcadeQuestion.cat || "BRAIN QUEST";
+    $("arcade-progress-fill").style.width = (arcadeRound / info.rounds * 100) + "%";
     $("arcade-next").disabled = true;
     $("arcade-next").textContent = arcadeRound === info.rounds - 1 ? "See results ✦" : "Next challenge →";
-    $("arcade-feedback").textContent = arcadeMode === "memory" ? "Memory Flip: memorize the correct answer letter, then answer the question." : "Lock in your answer!";
+    $("arcade-feedback").textContent = "Choose carefully. You'll get an explanation after you answer.";
     $("arcade-question").textContent = arcadeQuestion.q;
-    $("arcade-answers").innerHTML = arcadeQuestion.a.map((a,i) => `<button class="arcade-answer" data-answer="${i}">${String.fromCharCode(65+i)} · ${escapeHtml(a)}</button>`).join("");
+    $("arcade-answers").innerHTML = arcadeQuestion.a.map((a,i) => `<button class="arcade-answer" data-answer="${i}"><span class="answer-letter">${String.fromCharCode(65+i)}</span><span>${escapeHtml(a)}</span></button>`).join("");
     updateArcadeStats();
+    arcadeTimer = setInterval(() => {
+      if (arcadeLocked) return;
+      arcadeSeconds--;
+      $("arcade-timer").textContent = arcadeSeconds + "s";
+      if (arcadeSeconds <= 5) $("arcade-timer").classList.add("urgent");
+      if (arcadeSeconds <= 0) submitArcadeAnswer(-1, true);
+    }, 1000);
   }
   function updateArcadeStats() {
     const parts = [`ROUND ${Math.min(arcadeRound+1, arcadeModes[arcadeMode].rounds)}`, `SCORE ${arcadeScore}`];
@@ -165,31 +188,41 @@
     $("arcade-stat-one").textContent = parts[0] + "  ·  " + (parts[2] || "");
     $("arcade-stat-two").textContent = parts[1];
   }
-  $("arcade-answers").addEventListener("click", e => {
-    const btn = e.target.closest("[data-answer]"); if (!btn || arcadeLocked) return;
-    arcadeLocked = true;
-    const chosen = Number(btn.dataset.answer), correct = chosen === arcadeQuestion.c;
+  function submitArcadeAnswer(chosen, timedOut = false) {
+    if (arcadeLocked) return;
+    arcadeLocked = true; clearInterval(arcadeTimer);
+    const correct = chosen === arcadeQuestion.c;
     [...$("arcade-answers").querySelectorAll("button")].forEach((b,i) => {
       b.disabled = true;
       if (i === arcadeQuestion.c) b.classList.add("correct");
       else if (i === chosen) b.classList.add("wrong");
     });
     if (correct) {
-      const bonus = arcadeMode === "streak" ? 100 * (arcadeCombo + 1) : arcadeMode === "blitz" ? 150 : 100;
+      const speedBonus = Math.max(0, arcadeSeconds) * 5;
+      const bonus = (arcadeMode === "streak" ? 100 * (arcadeCombo + 1) : arcadeMode === "blitz" ? 100 : 100) + speedBonus;
       arcadeScore += bonus; arcadeCombo++;
       if (arcadeMode === "boss") arcadeBossHp--;
-      $("arcade-feedback").textContent = `CORRECT! +${bonus} points${arcadeMode === "streak" ? " · combo ×" + arcadeCombo : ""}`;
+      $("arcade-feedback").innerHTML = `<strong class="feedback-good">NICE! +${bonus} POINTS</strong><span>${escapeHtml(arcadeQuestion.why || "You selected the correct answer.")}</span>`;
     } else {
       arcadeCombo = 0;
       if (arcadeMode === "survival") arcadeLives--;
-      $("arcade-feedback").textContent = arcadeMode === "survival" ? `Oof! One life lost. ${arcadeLives} left.` : "Not quite! The correct answer is highlighted.";
+      const intro = timedOut ? "TIME'S UP." : "NOT QUITE.";
+      $("arcade-feedback").innerHTML = `<strong class="feedback-bad">${intro}</strong><span>${escapeHtml(arcadeQuestion.why || "Review the highlighted correct answer and try another round.")}</span>`;
     }
     arcadeRound++;
+    $("arcade-progress-fill").style.width = (arcadeRound / arcadeModes[arcadeMode].rounds * 100) + "%";
     updateArcadeStats();
     $("arcade-next").disabled = false;
+  }
+  $("arcade-answers").addEventListener("click", e => {
+    const btn = e.target.closest("[data-answer]"); if (!btn || arcadeLocked) return;
+    submitArcadeAnswer(Number(btn.dataset.answer));
   });
   $("arcade-next").addEventListener("click", () => { if (!arcadeLocked) return; loadArcadeQuestion(); });
   function finishArcade() {
+    clearInterval(arcadeTimer);
+    $("arcade-progress-fill").style.width = "100%";
+    $("arcade-timer").textContent = "DONE";
     $("arcade-question").textContent = arcadeMode === "boss" && arcadeBossHp <= 0 ? "BOSS DEFEATED! 🐉" : arcadeMode === "survival" && arcadeLives <= 0 ? "GAME OVER — RUN ENDED" : "CHALLENGE COMPLETE! ✦";
     $("arcade-answers").innerHTML = "";
     $("arcade-feedback").textContent = `Final score: ${arcadeScore}. ${arcadeMode === "streak" ? "Best combo: " + arcadeCombo + "." : "Nice run, player!"}`;
