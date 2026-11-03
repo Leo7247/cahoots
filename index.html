@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#101020">
+  <title>CaHoOtS? — Play your curiosity</title>
+  <meta name="description" content="Create quizzes, challenge friends, and jump into pArKoUr?">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="CaHoOtS home"><span class="brand-mark">C?</span><span>CaHoOtS<span class="brand-dot">?</span></span></a>
+      <nav class="nav"><button class="nav-link active" data-page="home">Home</button><button class="nav-link" data-page="discover">Discover</button><button class="nav-link" data-page="create">Create</button></nav>
+      <div class="top-actions"><span id="user-label" class="user-label">Guest player</span><button id="signin-btn" class="btn btn-small btn-quiet">Sign in</button></div>
+    </header>
+    <main>
+      <section id="home" class="page active">
+        <div class="hero">
+          <div class="hero-copy"><span class="eyebrow"><span class="live-dot"></span> YOUR NEXT “ONE MORE ROUND”</span><h1>Big brain.<br><span class="gradient-text">Big energy.</span></h1><p>Make quizzes, challenge your crew, and turn right answers into ridiculous victories.</p>
+            <div class="hero-actions"><button class="btn btn-primary" data-go="create">＋ Make a quiz</button><button class="btn btn-outline" data-go="join">Join a game ↗</button></div>
+            <div class="mini-proof"><span class="avatar-stack"><i>L</i><i>★</i><i>?</i></span><span>Made for curious minds.</span></div>
+          </div>
+          <div class="hero-art" aria-label="Decorative game illustration"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="float-card card-purple">✦<small>SMART MOVE</small></div><div class="main-orb"><span>?</span></div><div class="float-card card-yellow">+100<small>BRAIN XP</small></div><div class="spark s1">✦</div><div class="spark s2">✳</div><div class="spark s3">✦</div></div>
+        </div>
+        <section class="join-panel" id="join"><div><span class="eyebrow">GOT A GAME PIN?</span><h2>Jump right in.</h2><p>Enter the code your host shared with you.</p></div><form id="join-form" class="pin-form"><label class="sr-only" for="pin-input">Game PIN</label><input id="pin-input" maxlength="6" inputmode="text" autocomplete="off" placeholder="ENTER PIN" required><button class="btn btn-primary" type="submit">Let's go →</button></form></section>
+        <section class="section-block"><div class="section-heading"><div><span class="eyebrow">YOUR PLAYGROUND</span><h2>Pick your next adventure.</h2></div><button class="text-button" data-page="discover">Explore all →</button></div><div class="mode-grid">
+          <button class="mode-card mode-violet" data-go="create"><span class="mode-icon">✎</span><span class="mode-tag">CREATE</span><strong>Quiz Studio</strong><small>Your questions. Your rules. Your masterpiece.</small><span class="mode-arrow">↗</span></button>
+          <button class="mode-card mode-orange" data-go="parkour"><span class="mode-icon">↗</span><span class="mode-tag">ARCADE MODE</span><strong>pArKoUr?</strong><small>Get answers right. Charge up. Make the jump.</small><span class="mode-arrow">↗</span></button>
+          <button class="mode-card mode-blue" data-go="discover"><span class="mode-icon">◉</span><span class="mode-tag">STUDY MODE</span><strong>Brain Boost</strong><small>Practice at your own pace, zero pressure.</small><span class="mode-arrow">↗</span></button>
+        </div></section>
+        <section class="section-block"><div class="section-heading"><div><span class="eyebrow">THE ARCADE / PICK YOUR CHAOS</span><h2>More ways to play.</h2></div></div>
+          <div class="arcade-grid">
+            <button class="arcade-card arcade-pink" data-mode="blitz"><span class="arcade-emoji">⚡</span><span class="mode-tag">SPEED ROUND</span><strong>BLITZ!</strong><small>10 seconds. One question. Trust your brain.</small></button>
+            <button class="arcade-card arcade-red" data-mode="survival"><span class="arcade-emoji">♥</span><span class="mode-tag">NO MERCY</span><strong>LAST BRAIN STANDING</strong><small>Three lives. Every mistake brings you closer to game over.</small></button>
+            <button class="arcade-card arcade-gold" data-mode="boss"><span class="arcade-emoji">🐉</span><span class="mode-tag">BOSS FIGHT</span><strong>QUIZ RAID</strong><small>Correct answers deal damage. Defeat the knowledge monster.</small></button>
+            <button class="arcade-card arcade-teal" data-mode="streak"><span class="arcade-emoji">🔥</span><span class="mode-tag">COMBO MODE</span><strong>STREAK MACHINE</strong><small>Chain correct answers. Build a massive combo.</small></button>
+            <button class="arcade-card arcade-blue" data-mode="memory"><span class="arcade-emoji">🧠</span><span class="mode-tag">FOCUS MODE</span><strong>MEMORY FLIP</strong><small>Remember the sequence, then repeat it.</small></button>
+            <button class="arcade-card arcade-violet" data-mode="parkour" data-go="parkour"><span class="arcade-emoji">🏃</span><span class="mode-tag">PLATFORMER</span><strong>pArKoUr?</strong><small>Charge your battery and leap to the finish.</small></button>
+          </div>
+        </section>
+        <section class="section-block"><div class="section-heading"><div><span class="eyebrow">YOUR RECENT QUESTS</span><h2>Keep the streak alive.</h2></div></div><div id="recent-list" class="recent-list"></div></section>
+      </section>
+      <section id="discover" class="page"><div class="page-heading"><span class="eyebrow">THE DISCOVERY ZONE</span><h1>Find your next <span class="gradient-text">brain quest.</span></h1><p>Browse your saved quizzes or start a quick practice round.</p></div><div class="toolbar"><input id="search-input" placeholder="Search quizzes..." aria-label="Search quizzes"><button class="btn btn-primary" data-go="create">＋ Create new</button></div><div id="quiz-grid" class="quiz-grid"></div></section>
+      <section id="create" class="page"><div class="page-heading"><span class="eyebrow">QUIZ STUDIO</span><h1>Make something <span class="gradient-text">mind-blowing.</span></h1><p>Build a quiz right here. Your draft is saved on this device.</p></div><form id="quiz-form" class="editor-card"><label>Quiz title<input id="quiz-title" maxlength="80" placeholder="e.g. The Ultimate Space Challenge" required></label><label>Description<input id="quiz-description" maxlength="160" placeholder="What will players discover?"></label><div class="editor-divider"></div><div class="question-head"><h2>Question 1</h2><span class="pill">MULTIPLE CHOICE</span></div><label>Question text<input id="question-text" maxlength="240" placeholder="What is the question?" required></label><div class="answer-grid"><label class="answer-option"><span>A</span><input id="answer-a" placeholder="Answer A" required></label><label class="answer-option"><span>B</span><input id="answer-b" placeholder="Answer B" required></label><label class="answer-option"><span>C</span><input id="answer-c" placeholder="Answer C" required></label><label class="answer-option"><span>D</span><input id="answer-d" placeholder="Answer D" required></label></div><label>Correct answer<select id="correct-answer"><option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option></select></label><div class="editor-actions"><button type="button" class="btn btn-quiet" data-page="discover">Cancel</button><button class="btn btn-primary" type="submit">Save my quiz ✦</button></div></form></section>
+      <section id="parkour" class="page"><div class="page-heading"><span class="eyebrow">ARCADE MODE / BETA</span><h1>pArKoUr<span class="gradient-text">?</span></h1><p>Correct answers charge your battery. Every move costs 5 energy. Can you reach the finish?</p></div><div class="game-card"><div class="game-top"><div><span class="eyebrow">PLAYER BATTERY</span><h2><span id="battery-value">20</span><small> / 100 ENERGY</small></h2></div><button id="recharge-btn" class="btn btn-primary">Answer to recharge +20</button></div><div class="battery-track"><div id="battery-fill" class="battery-fill"></div></div><div id="parkour-track" class="parkour-track"></div><div class="game-controls"><button id="move-btn" class="btn btn-primary">Jump forward → (−5)</button><button id="restart-game" class="btn btn-quiet">Restart run</button></div><p id="game-message" class="game-message">Answer correctly to recharge, then jump across the platforms.</p><p class="disclaimer">Local practice prototype — other players are not synchronized yet.</p></div></section>
+      <section id="arcade" class="page"><div class="page-heading"><span class="eyebrow" id="arcade-eyebrow">ARCADE / GAME MODE</span><h1 id="arcade-title">Choose your <span class="gradient-text">challenge.</span></h1><p id="arcade-description">Ready, player?</p></div>
+        <div class="arcade-play-card">
+          <div class="arcade-stats"><span id="arcade-stat-one">ROUND 1</span><span id="arcade-stat-two">SCORE 0</span></div>
+          <div class="arcade-question" id="arcade-question">Loading challenge…</div>
+          <div id="arcade-answers" class="arcade-answers"></div>
+          <div id="arcade-feedback" class="arcade-feedback">Choose your answer to begin.</div>
+          <div class="arcade-bottom"><button id="arcade-next" class="btn btn-primary" disabled>Next challenge →</button><button class="btn btn-quiet" data-page="home">Exit mode</button></div>
+        </div>
+      </section>
+      <section id="signin" class="page"><div class="signin-card"><div class="brand-mark big-mark">C?</div><span class="eyebrow">YOUR ACCOUNT, YOUR QUESTS</span><h1>Welcome to the <span class="gradient-text">crew.</span></h1><p>Sign-in becomes available after you connect your Supabase project in the optional configuration step.</p><button class="btn btn-primary" id="google-btn">Continue with Google</button><button class="text-button" data-page="home">← Back to home</button><p class="small-note" id="auth-note">For now, quizzes are saved in this browser on this device.</p></div></section>
+    </main>
+    <footer><a class="brand footer-brand" href="#"><span class="brand-mark">C?</span><span>CaHoOtS<span class="brand-dot">?</span></span></a><span>Play your curiosity. Be kind. Get weird.</span><span class="footer-beta">EARLY ACCESS / BETA</span></footer>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="config.js"></script><script src="app.js"></script>
+</body>
+</html>
