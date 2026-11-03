@@ -291,5 +291,5 @@
     startArcade(card.dataset.mode);
   }));
 
-  renderRecent(); renderQuizzes(); renderTrack();
+renderRecent(); renderQuizzes(); renderTrack(); initSupabaseAuth();
 })();
