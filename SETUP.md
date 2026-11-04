@@ -1,38 +1,33 @@
-# CaHoOtS — iPad setup
+# CaHoOtS deployment instructions
 
-## 1. Upload to GitHub
-1. Open your repository: https://github.com/leo7247/cahoots
-2. Open the repository root and choose **Add file → Upload files**.
-3. Extract this ZIP in the iPad Files app. Upload all files inside it to the root (same level as `index.html`).
-4. Commit the changes to `main`. Do not upload the ZIP itself as a single file.
-5. Wait for GitHub Pages to finish deploying.
+## 1. Back up first
+Download a copy of your current GitHub repository before replacing files.
 
-## 2. Update Supabase database
-1. Open https://supabase.com/dashboard/project/himuumvqxfvoywvtqvxp/sql/new
-2. Open `multiplayer.sql` from the extracted ZIP in Files.
-3. Copy its entire contents and paste into Supabase SQL Editor.
-4. Tap **Run**. This is an upgrade migration: it adds per-question points, game-mode metadata, survival lives, streak tracking, and raid boss health to the existing live-room schema.
-5. Confirm the SQL Editor reports success.
+## 2. Update the website
+1. Extract this ZIP and open `cahoots_release`.
+2. Upload the files from that folder into the GitHub repository root (the same folder as `index.html`).
+3. Replace `index.html`, `style.css`, `app.js`, `multiplayer.js`, `parkour.js`, and `config.js` with the supplied versions. Keep the supplied `config.js` values together; never paste a Supabase service-role key or Google client secret into browser code.
+4. Commit to `main` and wait for GitHub Pages to deploy.
 
-## 3. Test
-1. Open https://leo7247.github.io/cahoots/ in Safari. If an older copy appears, open a new tab or refresh after deployment.
-2. Sign in with Google.
-3. Open **Create**. Add multiple questions, select the correct answer and point value for each, then save.
-4. Open **Host a game**. Choose a quiz, choose a game mode, enter your nickname, and create a room.
-5. Share the six-digit PIN. Players join from the same site with a nickname.
-6. Host taps **Start game**, then **Next question** after the group has answered.
+## 3. Update Supabase safely
+Because your existing CaHoOtS database already has the original room tables and previous game-mode upgrade, run **only the included `multiplayer.sql`** as an upgrade. Do not run the full `supabase-schema.sql` as well. The migration adds parkour/timer columns, adds private per-player answer tokens, and replaces the older answer RPC. It does not delete room or quiz data. Existing active rooms should be finished before applying the migration; players should rejoin after the update.
 
-## Modes
-- **Classic:** each correct answer earns that question's point value.
-- **BLITZ!:** 1.5× question points.
-- **Last Brain Standing:** three lives; a wrong answer costs one life and the third wrong answer eliminates the player.
-- **Quiz Raid:** correct answers damage the shared boss while earning question points.
-- **Streak Machine:** each consecutive correct answer increases the award, up to a 2× multiplier.
-- **Memory Flip:** focus-themed live quiz ruleset.
-- **pArKoUr?:** energy-run themed live quiz ruleset; standalone parkour arcade remains local.
+`supabase-schema.sql` is included for reference / a fresh complete setup. Do not run it on top of the migration as a second step.
 
-## Security and notes
-- Keep the existing `config.js` publishable key unchanged unless you intentionally rotate it. It must match the Supabase URL.
-- Never put a Supabase service-role/secret key, database password, or Google OAuth client secret in GitHub.
-- Hosting requires Google sign-in; joining can be guest nickname-based.
-- Rooms use polling, not Supabase Realtime. The host advances questions manually.
+## 4. Test pArKoUr?
+1. Open the site on the host device and sign in with Google.
+2. Create or select a saved quiz.
+3. Open pArKoUr? from the home arcade or choose it in the host game-mode selector.
+4. Create the room and share the PIN.
+5. Join from a second device, then press Start game on the host.
+
+## Controls
+- iPad / touch: hold ◀ / ▶ to move; tap JUMP for a normal jump or a second mid-air jump.
+- Keyboard: A/D or Left/Right arrows to move; Space, W, or Up arrow to jump (double-jump supported).
+- Avoid red spikes, land on raised platforms, and reach the yellow finish marker. Other players' runners are shown through Supabase Realtime Broadcast.
+
+## Safety and testing notes
+- The migration gives each player a private random token. Answer submissions must include that token; the token is not included in the public room snapshot and direct player-table access is revoked.
+- The platformer positions are client-simulated and broadcast for display. They are not server-authoritative, so this is suitable for a casual friend race, not competitive anti-cheat play.
+- JavaScript syntax checks are included in the build process, but the site has not been exercised against your live Supabase project from here. Test with two devices before inviting a large group.
+- Rejoining or refreshing resets a runner's position.

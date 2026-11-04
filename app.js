@@ -318,7 +318,7 @@
     $("arcade-next").onclick = () => startArcade(arcadeMode);
   }
   document.querySelectorAll("[data-mode]").forEach(card => card.addEventListener("click", () => {
-    if (card.dataset.mode === "parkour") { go("parkour"); return; }
+    if (card.dataset.mode === "parkour") { go("multiplayer"); const modeSelect=$("host-mode"); if(modeSelect){modeSelect.value="parkour";modeSelect.dispatchEvent(new Event("change"));} return; }
     startArcade(card.dataset.mode);
   }));
 

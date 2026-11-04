@@ -27,7 +27,7 @@
         <section class="join-panel" id="join"><div><span class="eyebrow">GOT A GAME PIN?</span><h2>Jump right in.</h2><p>Enter the code your host shared with you.</p></div><form id="join-form" class="pin-form"><label class="sr-only" for="pin-input">Game PIN</label><input id="pin-input" maxlength="6" inputmode="numeric" autocomplete="off" placeholder="6-DIGIT PIN" required><input id="join-nickname" maxlength="24" placeholder="YOUR NICKNAME" required><button class="btn btn-primary" type="submit">Let's go →</button></form></section>
         <section class="section-block"><div class="section-heading"><div><span class="eyebrow">YOUR PLAYGROUND</span><h2>Pick your next adventure.</h2></div><button class="text-button" data-page="discover">Explore all →</button></div><div class="mode-grid">
           <button class="mode-card mode-violet" data-go="create"><span class="mode-icon">✎</span><span class="mode-tag">CREATE</span><strong>Quiz Studio</strong><small>Your questions. Your rules. Your masterpiece.</small><span class="mode-arrow">↗</span></button>
-          <button class="mode-card mode-orange" data-go="parkour"><span class="mode-icon">↗</span><span class="mode-tag">ARCADE MODE</span><strong>pArKoUr?</strong><small>Get answers right. Charge up. Make the jump.</small><span class="mode-arrow">↗</span></button>
+          <button class="mode-card mode-orange" data-go="multiplayer" data-mode="parkour"><span class="mode-icon">↗</span><span class="mode-tag">LIVE ARCADE</span><strong>pArKoUr?</strong><small>Run, jump, dodge spikes, and race your crew.</small><span class="mode-arrow">↗</span></button>
           <button class="mode-card mode-blue" data-go="discover"><span class="mode-icon">◉</span><span class="mode-tag">STUDY MODE</span><strong>Brain Boost</strong><small>Practice at your own pace, zero pressure.</small><span class="mode-arrow">↗</span></button>
         </div></section>
         <section class="section-block"><div class="section-heading"><div><span class="eyebrow">THE ARCADE / PICK YOUR CHAOS</span><h2>More ways to play.</h2></div></div>
@@ -37,7 +37,7 @@
             <button class="arcade-card arcade-gold" data-mode="boss"><span class="arcade-emoji">🐉</span><span class="mode-tag">BOSS FIGHT</span><strong>QUIZ RAID</strong><small>Correct answers deal damage. Defeat the knowledge monster.</small></button>
             <button class="arcade-card arcade-teal" data-mode="streak"><span class="arcade-emoji">🔥</span><span class="mode-tag">COMBO MODE</span><strong>STREAK MACHINE</strong><small>Chain correct answers. Build a massive combo.</small></button>
             <button class="arcade-card arcade-blue" data-mode="memory"><span class="arcade-emoji">🧠</span><span class="mode-tag">FOCUS MODE</span><strong>MEMORY FLIP</strong><small>Remember the sequence, then repeat it.</small></button>
-            <button class="arcade-card arcade-violet" data-mode="parkour" data-go="parkour"><span class="arcade-emoji">🏃</span><span class="mode-tag">PLATFORMER</span><strong>pArKoUr?</strong><small>Charge your battery and leap to the finish.</small></button>
+            <button class="arcade-card arcade-violet" data-mode="parkour" data-go="multiplayer"><span class="arcade-emoji">🏃</span><span class="mode-tag">LIVE PLATFORMER</span><strong>pArKoUr?</strong><small>Run, double-jump, dodge spikes, and race to the finish.</small></button>
           </div>
         </section>
         <section class="section-block"><div class="section-heading"><div><span class="eyebrow">YOUR RECENT QUESTS</span><h2>Keep the streak alive.</h2></div></div><div id="recent-list" class="recent-list"></div></section>
@@ -64,6 +64,6 @@
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script><script src="app.js"></script>
-  <script src="multiplayer.js"></script>
+  <script src="multiplayer.js"></script><script src="parkour.js"></script>
 </body>
 </html>
