@@ -1,37 +1,18 @@
-# CaHoOtS?
+# CaHoOtS — Quiz Arcade + Live Rooms
 
-A colorful, mobile-friendly quiz playground designed to be edited and uploaded from an iPad.
+Mobile-first quiz maker and game platform for GitHub Pages, designed to be maintained from an iPad.
 
-## Upload on iPad (no computer)
+## Included
+- Google sign-in through Supabase (existing project config preserved)
+- Multi-question Quiz Studio (up to 40 questions)
+- Per-question point values: 100–2,000
+- Local practice across every question
+- Arcade modes: BLITZ!, Last Brain Standing, Quiz Raid, Streak Machine, Memory Flip, and pArKoUr?
+- Live multiplayer rooms with host-selected mode, six-digit PIN, player list, and server-side scoring
+- Mobile-responsive interface
 
-1. Create a GitHub repository named `CaHoOtS`.
-2. In the repository, tap **Add file → Upload files**.
-3. Upload these files from this ZIP: `index.html`, `style.css`, `app.js`, `config.js`, `README.md`, `SETUP.md`, and `supabase-schema.sql`.
-4. Commit the files to the `main` branch.
-5. Open **Settings → Pages** and select **Deploy from a branch**, branch `main`, folder `/ (root)**, then Save.
-6. Wait a minute or two, then open the Pages URL shown in Settings → Pages.
+## Files
+Upload every file in this ZIP to the repository root. Keep `config.js` as supplied; its public publishable key is configured for the existing Supabase project.
 
-This is a flat static site: no folders, Node.js, terminal, build step, or computer required.
-
-## What's included
-
-- Responsive dark neon design
-- Home, Discover, Create, and pArKoUr? pages
-- Create and save a one-question multiple-choice quiz in this browser
-- Local practice and battery-based parkour prototype
-- Optional Supabase database schema for a future backend
-
-## Authentication upgrade
-
-The Google sign-in upgrade initializes the Supabase browser client, starts Google OAuth, restores sessions, and supports sign-out. Follow `SETUP.md` to configure the Google OAuth provider in Supabase.
-
-## Important limits
-
-Room PIN entry is not yet connected to real rooms; cloud-saved quizzes, synchronized multiplayer, live host controls, secure scoring, and real online leaderboards are not implemented yet. All arcade modes, including parkour, are local practice prototypes only; they are not synchronized multiplayer. Do not advertise it as a complete multiplayer service until a backend is connected and tested.
-
-## Security
-
-Only public browser credentials may be placed in `config.js`. Never put passwords, Google OAuth client secrets, Supabase service-role keys, or other private secrets into files uploaded to GitHub.
-
-### Live multiplayer
-The live room MVP is in `multiplayer.js` and `multiplayer.sql`. Follow the multiplayer setup section in `SETUP.md` before hosting. Hosting requires Google sign-in; joining supports guest nicknames.
+## Important
+This is an upgraded beta, not a commercial-grade service. Memory Flip and pArKoUr? are themed quiz rulesets in live rooms; their richer standalone arcade versions remain local practice experiences. Test with a small group first. Never expose Supabase secret/service-role keys or Google OAuth client secrets.

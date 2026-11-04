@@ -21,10 +21,11 @@
     try {
       const user=api().session?.user; if(!user) throw new Error('Sign in with Google before hosting.');
       const list=api().quizzes||[]; const quiz=list[Number($('host-quiz').value)]; if(!quiz) throw new Error('Create a quiz first, then host it.');
-      const questions=quiz.questions.map(q=>({text:q.text,answers:q.answers,correct:Number(q.correct)}));
-      const result=await rpc('cahoots_create_room',{p_title:quiz.title,p_questions:questions,p_nickname:$('host-nickname').value.trim()||'Host'});
+      const questions=quiz.questions.map(q=>({text:q.text,answers:q.answers,correct:Number(q.correct),points:Number(q.points)||100}));
+      const mode=$('host-mode').value;
+      const result=await rpc('cahoots_create_room',{p_title:quiz.title,p_questions:questions,p_nickname:$('host-nickname').value.trim()||'Host',p_game_mode:mode});
       pin=result.pin; playerId=result.player_id; isHost=true; lastQuestion=-1; answered=false;
-      $('room-pin').textContent=pin; $('room-title').textContent=quiz.title; $('host-start').hidden=false; $('host-next').hidden=true; showRoom(); await refresh(); startPolling();
+      $('room-pin').textContent=pin; $('room-title').textContent=quiz.title; $('room-mode-label').textContent='MODE: '+mode.toUpperCase(); $('host-start').hidden=false; $('host-next').hidden=true; showRoom(); await refresh(); startPolling();
     } catch(e) { window.alert(e.message||String(e)); }
   }
   async function joinRoom() {
@@ -39,13 +40,15 @@
     if(!pin) return;
     try {
       const s=await rpc('cahoots_room_snapshot',{p_pin:pin});
-      $('room-status').textContent=s.status.toUpperCase(); $('player-count').textContent=s.players.length;
-      $('room-players').innerHTML=s.players.map((p,i)=>`<div class="recent-item"><strong>${i+1}. ${esc(p.nickname)}</strong><small>${p.score} pts</small></div>`).join('')||'<p>Waiting for players…</p>';
+      $('room-status').textContent=s.status.toUpperCase(); $('player-count').textContent=s.players.length; if(s.game_mode) $('room-mode-label').textContent='MODE: '+s.game_mode.toUpperCase();
+      $('room-players').innerHTML=s.players.map((p,i)=>`<div class="recent-item"><strong>${i+1}. ${esc(p.nickname)}${p.eliminated?' · OUT':''}</strong><small>${p.score} pts${s.game_mode==='survival'?' · '+p.lives+' lives':''}${s.game_mode==='streak'?' · streak '+p.streak:''}</small></div>`).join('')||'<p>Waiting for players…</p>';
+      if(s.game_mode==='boss') $('room-mode-label').textContent='MODE: QUIZ RAID · BOSS HP '+s.boss_hp;
+      const me=s.players.find(p=>p.id===playerId); if(me&&me.eliminated&&!isHost){$('live-answers').innerHTML='<p>You are out of lives. Watch the leaderboard!</p>';}
       if(s.status==='waiting') { $('live-question').textContent='Waiting for the host to start…'; $('live-answers').innerHTML=''; }
       if(s.status==='active' && s.question) {
-        $('live-question').textContent=`Q${s.question_index+1}/${s.total_questions}: ${s.question.text}`;
+        $('live-question').textContent=`Q${s.question_index+1}/${s.total_questions} · ${s.question.points||100} PTS: ${s.question.text}`;
         if(lastQuestion!==s.question_index) {lastQuestion=s.question_index;answered=false;}
-        if(!isHost) $('live-answers').innerHTML=s.question.answers.map((a,i)=>`<button class="live-choice" data-live-answer="${i}" ${answered?'disabled':''}>${'ABCD'[i]}. ${esc(a)}</button>`).join('');
+        if(!isHost && !(s.players.find(p=>p.id===playerId)||{}).eliminated) $('live-answers').innerHTML=s.question.answers.map((a,i)=>`<button class="live-choice" data-live-answer="${i}" ${answered?'disabled':''}>${'ABCD'[i]}. ${esc(a)}</button>`).join('');
         else $('live-answers').innerHTML='<p>Players are answering…</p>';
         $('host-start').hidden=true; $('host-next').hidden=!isHost;
       }
@@ -56,9 +59,10 @@
   async function submitAnswer(index) {
     if(answered) return; answered=true;
     document.querySelectorAll('[data-live-answer]').forEach(b=>b.disabled=true);
-    try { const result=await rpc('cahoots_submit_answer',{p_pin:pin,p_player_id:playerId,p_answer:index}); say(result.correct?'Correct! +100 points ✦':'Not quite — keep going!'); await refresh(); }
+    try { const result=await rpc('cahoots_submit_answer',{p_pin:pin,p_player_id:playerId,p_answer:index}); say(result.correct?`Correct! +${result.awarded||result.points||'points'} ✦`:'Not quite — keep going!'); await refresh(); }
     catch(e){say(e.message||'Could not submit answer.');}
   }
+  $('host-mode').addEventListener('change',()=>{const d={classic:'Standard rules. Each question awards its own points.',blitz:'Fast-round style. Question points are boosted by 50%.',survival:'Three lives per player. Three wrong answers eliminate a player.',boss:'Correct answers damage the shared quiz boss; points still count.',streak:'Correct answers build a combo bonus; a wrong answer resets the streak.',memory:'Focus mode. Questions and answer choices are presented in the same live room.',parkour:'Energy-run scoring. Correct answers award question points and charge progress.'};$('host-mode-description').textContent=d[$('host-mode').value]||d.classic;});
   $('host-create').addEventListener('click',hostRoom);
   $('join-form').addEventListener('submit',e=>{e.preventDefault();joinRoom();});
   $('host-start').addEventListener('click',async()=>{try{await rpc('cahoots_host_start',{p_pin:pin});await refresh();}catch(e){say(e.message);}});

@@ -15,7 +15,7 @@
     const el = $("toast"); el.textContent = message; el.classList.add("show");
     clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove("show"), 2800);
   };
-  const save = () => { try { localStorage.setItem(storeKey, JSON.stringify(quizzes)); } catch (_) {} };
+  const save = () => { try { localStorage.setItem(storeKey, JSON.stringify(quizzes)); } catch (_) {} if(window.CAHOOTS_API) window.CAHOOTS_API.quizzes=quizzes; };
   function go(page) {
     if (!$(page)) page = "home";
     document.querySelectorAll(".page").forEach(p => p.classList.toggle("active", p.id === page));
@@ -56,21 +56,47 @@
     const btn = e.target.closest("[data-practice]"); if (!btn) return;
     const q = quizzes.find(x => x.id === btn.dataset.practice); if (q) startPractice(q);
   });
+  // Multi-question quiz studio. Every question stores its own point value.
+  let draftQuestionCount = 0;
+  function addQuestionCard() {
+    if (draftQuestionCount >= 40) { toast("A quiz can have up to 40 questions."); return; }
+    const n = ++draftQuestionCount;
+    const wrap = document.createElement("section");
+    wrap.className = "question-editor"; wrap.dataset.question = String(n);
+    wrap.innerHTML = `<div class="question-head"><h2>Question ${n}</h2><button type="button" class="text-button" data-remove-question="${n}">Remove</button></div>
+      <label>Question text<input data-qtext maxlength="240" placeholder="Write question ${n}…" required></label>
+      <div class="answer-grid">${[0,1,2,3].map(i=>`<label class="answer-option"><span>${"ABCD"[i]}</span><input data-answer="${i}" placeholder="Answer ${"ABCD"[i]}" required></label>`).join("")}</div>
+      <div class="question-settings"><label>Correct answer<select data-correct><option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option></select></label><label>Points for this question<select data-points><option value="100">100 points</option><option value="200">200 points</option><option value="300">300 points</option><option value="500">500 points</option><option value="750">750 points</option><option value="1000">1,000 points</option><option value="1500">1,500 points</option><option value="2000">2,000 points</option></select></label></div>`;
+    $("question-builder").appendChild(wrap);
+  }
+  function renumberQuestionCards() {
+    [...document.querySelectorAll(".question-editor")].forEach((card,i)=>{
+      card.querySelector(".question-head h2").textContent = `Question ${i+1}`;
+    });
+  }
+  $("add-question").addEventListener("click", addQuestionCard);
+  $("question-builder").addEventListener("click", e=>{
+    const b=e.target.closest("[data-remove-question]"); if(!b) return;
+    const cards=document.querySelectorAll(".question-editor");
+    if(cards.length<=1){toast("Keep at least one question in your quiz.");return;}
+    b.closest(".question-editor").remove(); renumberQuestionCards();
+  });
   $("quiz-form").addEventListener("submit", e => {
     e.preventDefault();
     const title = $("quiz-title").value.trim();
-    const question = $("question-text").value.trim();
-    const answers = [$("answer-a").value.trim(), $("answer-b").value.trim(), $("answer-c").value.trim(), $("answer-d").value.trim()];
-    if (!title || !question || answers.some(a => !a)) { toast("Fill in the title, question, and all four answers."); return; }
-    const quiz = { id: (Date.now().toString(36) + Math.random().toString(36).slice(2,7)), title, description: $("quiz-description").value.trim(), questions: [{ text: question, answers, correct: Number($("correct-answer").value) }], createdAt: new Date().toISOString() };
-    quizzes.push(quiz); save(); e.target.reset(); renderQuizzes(); renderRecent(); toast("Quiz saved on this device ✦"); go("discover");
+    const cards = [...document.querySelectorAll(".question-editor")];
+    const questions = cards.map(card=>({
+      text:card.querySelector("[data-qtext]").value.trim(),
+      answers:[...card.querySelectorAll("[data-answer]")].map(x=>x.value.trim()),
+      correct:Number(card.querySelector("[data-correct]").value),
+      points:Number(card.querySelector("[data-points]").value)||100
+    }));
+    if(!title || !questions.length || questions.some(q=>!q.text || q.answers.length!==4 || q.answers.some(a=>!a))){toast("Fill in every question and all four answers.");return;}
+    const quiz={id:(Date.now().toString(36)+Math.random().toString(36).slice(2,7)),title,description:$("quiz-description").value.trim(),questions,createdAt:new Date().toISOString()};
+    quizzes.push(quiz); save(); e.target.reset(); $("question-builder").innerHTML=""; draftQuestionCount=0; addQuestionCard();
+    renderQuizzes();renderRecent();toast(`Quiz saved: ${questions.length} questions ✦`);go("discover");
   });
-  $("join-form").addEventListener("submit", e => {
-    e.preventDefault();
-    const pin = $("pin-input").value.trim().toUpperCase();
-    if (pin.length < 4) { toast("Enter the game PIN your host shared."); return; }
-    toast("Room joining needs the multiplayer backend. PIN: " + pin);
-  });
+  addQuestionCard();
   $("signin-btn").addEventListener("click", async () => {
     if (currentSession && supabaseClient) {
       const { error } = await supabaseClient.auth.signOut();
@@ -138,13 +164,16 @@
     $("auth-note").textContent = user ? "Signed in as " + (user.email || "your Google account") + "." : "Your local practice quizzes remain saved on this device.";
   }
   function startPractice(quiz) {
-    const q = quiz.questions[0];
-    const answerText = `${q.text}\n\n` + q.answers.map((a,i) => `${String.fromCharCode(65+i)}. ${a}`).join("\n") + "\n\nEnter A, B, C, or D:";
-    const answer = window.prompt(answerText);
-    if (answer === null) return;
-    const picked = answer.trim().toUpperCase().charCodeAt(0) - 65;
-    if (picked === q.correct) { toast("Correct! Big brain energy ✦"); battery = Math.min(100, battery + 20); updateBattery(); }
-    else toast("Not quite — try another round!");
+    let score=0, index=0;
+    function askNext(){
+      if(index>=quiz.questions.length){toast(`Practice complete! ${score} points from ${quiz.questions.length} questions.`);return;}
+      const q=quiz.questions[index];
+      const answerText=`${quiz.title} · Question ${index+1}/${quiz.questions.length} · ${q.points||100} pts\n\n${q.text}\n\n`+q.answers.map((a,i)=>`${String.fromCharCode(65+i)}. ${a}`).join("\n")+"\n\nEnter A, B, C, or D:";
+      const answer=window.prompt(answerText); if(answer===null)return;
+      const picked=answer.trim().toUpperCase().charCodeAt(0)-65;
+      if(picked===q.correct){score+=Number(q.points)||100;battery=Math.min(100,battery+20);updateBattery();toast(`Correct! +${q.points||100} points ✦`);}else toast("Not quite — next question!");
+      index++; if(index<quiz.questions.length) askNext(); else toast(`Finished! Score: ${score} points.`);
+    } askNext();
   }
   function updateBattery() {
     $("battery-value").textContent = battery;
